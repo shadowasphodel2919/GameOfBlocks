@@ -23,6 +23,7 @@ public class SoundManager : MonoBehaviour
 
     public AudioClip[] m_exclaimationSounds;
     public AudioClip m_gameOverVocal;
+    public AudioClip m_levelUpVocal;
 
     public AudioClip[] m_audioClips;//INVOKE THIS FOR RANDOM CLIPS
     public AudioClip m_randomClip;
@@ -30,7 +31,12 @@ public class SoundManager : MonoBehaviour
     {
         return clips[Random.Range(0, clips.Length)];
     }
-    
+
+    public IconToggle m_musicIconToggle;
+    public IconToggle m_fxIconToggle;
+
+    public AudioClip m_holdSound;
+
     void Start()
     {
         playBackgroundMusic(returnRandomClip(m_audioClips));
@@ -73,10 +79,19 @@ public class SoundManager : MonoBehaviour
     {
         m_musicEnabled = !m_musicEnabled;
         updateMusic();
+
+        if (m_musicIconToggle)
+        {
+            m_musicIconToggle.iconToggle(m_musicEnabled);
+        }
     }
 
     public void toggleFX()
     {
         m_fxEnabled = !m_fxEnabled;
+        if (m_fxIconToggle)
+        {
+            m_fxIconToggle.iconToggle(m_fxEnabled);
+        }
     }
 }

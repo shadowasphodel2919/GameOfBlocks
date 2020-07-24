@@ -10,6 +10,10 @@ public class Shape : MonoBehaviour {
         InvokeRepeating("moveDown", 0, .5f);
         InvokeRepeating("rotateRight", 0, .5f);
     }*/
+    public Vector3 m_queueOffset;//fixing size of queue
+
+   // public Vector3 m_holdOffset;//fixing size of hold shapes
+
     // general move method
     void move(Vector3 moveDirection)
 	{
@@ -50,5 +54,47 @@ public class Shape : MonoBehaviour {
 		if (m_canRotate)
 			transform.Rotate(0, 0, 90);
 	}
-		
+	
+    public void rotateClockwise(bool ck)
+    {
+        if (ck)
+        {
+            rotateRight();
+        }
+        else
+        {
+            rotateLeft();
+        }
+    }
+
+    //Effects
+    GameObject[] m_glowSquareFX;
+    public string gST = "LandShapeFX";
+
+    private void Start()
+    {
+        if (gST != "")
+        {
+            m_glowSquareFX = GameObject.FindGameObjectsWithTag(gST);
+        }
+    }
+
+    public void landShapeFX()
+    {
+        int i = 0;
+        foreach(Transform child in gameObject.transform)
+        {
+            if (m_glowSquareFX[i])
+            {
+                m_glowSquareFX[i].transform.position = new Vector3(child.position.x, child.position.y, -2f);
+                ParticlePlayer particlePlayer = m_glowSquareFX[i].GetComponent<ParticlePlayer>();
+
+                if (particlePlayer)
+                {
+                    particlePlayer.play();
+                }
+            }
+            i++;
+        }
+    }
 }

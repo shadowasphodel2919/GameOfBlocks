@@ -140,16 +140,25 @@ public class Board : MonoBehaviour
         }
     }
 
-    public void clearAllRows()
+    public IEnumerator clearAllRows()//public void clearAllRows()//Changing the return type to iEnumerator so as to implement delay in falling of blocks  for effects
     {
         m_completeRows = 0;
         for(int i = 0; i < m_height; ++i)
         {
             if (isComplete(i))
             {
+                clearRowFX(m_completeRows, i);//Calling line empty effect
                 m_completeRows++;
+            }
+        }
+        yield return new WaitForSeconds(0.5f);//first delay
+        for(int i = 0; i < m_height; ++i)
+        {
+            if (isComplete(i))
+            {
                 clearRow(i);
                 shiftRowsDown(i + 1);
+                yield return new WaitForSeconds(0.3f);//second delay
                 i--;
             }
         }
@@ -165,5 +174,18 @@ public class Board : MonoBehaviour
             }
         }
         return false;
+    }
+
+    //EFFECTS
+
+    public ParticlePlayer[] m_rowGlowFX=new ParticlePlayer[4];
+
+    void clearRowFX(int i,int y)
+    {
+        if (m_rowGlowFX[i])
+        {
+            m_rowGlowFX[i].transform.position = new Vector3(0, y, -2f);
+            m_rowGlowFX[i].play();
+        }
     }
 }
